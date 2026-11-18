@@ -29,7 +29,7 @@ for (mech in c("MCAR", "MAR", "MNAR")) {
 cat("Check 2: dropout is monotone, visit 1 always observed\n")
 
 # 3. MCAR dropout rate matches theory: P(missing at last visit) = 1 - (1 - p)^(visits - 1)
-p <- plogis(-2.2)
+p <- plogis(alpha_drop)
 theory <- 1 - (1 - p)^(n_visits - 1)
 observed <- mean(is.na(apply_dropout(big, "MCAR")[, n_visits]))
 cat(sprintf("Check 3: MCAR dropout at last visit = %.3f (theory %.3f)\n", observed, theory))

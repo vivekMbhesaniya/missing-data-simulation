@@ -29,9 +29,9 @@ n_visits  <- 4          # post-baseline visits (e.g. weeks 4, 8, 12, 16)
 rho       <- 0.6        # correlation between neighbouring visits (AR(1) structure)
 sd_y      <- 1          # residual SD per visit (outcome on a standardized scale)
 b_base    <- 0.5        # effect of baseline value on later visits
-n_sim     <- 500        # replicates per scenario. Test with 50 first (about 3 min);
+n_sim     <- 500      # replicates per scenario. Test with 50 first (about 3 min);
                         # 500 takes roughly 30 to 45 min on a laptop
-base_seed <- 20261120
+alpha_drop <- -2.2      # sets the dropout rate: about 27 % missing at the last visit under MCAR
 
 # ---- D: Data-generating mechanism -------------------------------------------
 # Higher y = more improvement. The treatment effect grows linearly over visits
@@ -53,7 +53,7 @@ simulate_trial <- function(delta) {
 # Monotone dropout: once a patient drops out, all later visits are missing.
 # Visit 1 is always observed. alpha sets the overall dropout rate,
 # beta sets how strongly dropout depends on the outcome.
-apply_dropout <- function(trial, mechanism, alpha = -2.2, beta = 1.0) {
+apply_dropout <- function(trial, mechanism, alpha = alpha_drop, beta = 1.0) {
   Y <- trial$Y
   n <- nrow(Y)
   if (mechanism == "none") return(Y)
